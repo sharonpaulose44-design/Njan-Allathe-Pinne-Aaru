@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HostelKart</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#071923;
+    --card:#123246;
+    --card-light:#123246;
+    --green:#00d26a;
+    --green-dark:#00b85c;
+    --text:#ffffff;
+    --secondary:#9fb3c8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+}
+
+header{
+    background:#0b1f2b;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.logo{
+    color:var(--green);
+    font-size:24px;
+    font-weight:700;
+    flex:1;
+    line-height:1.1;
+}
+
+.header-buttons{
+    display:flex;
+    gap:8px;
+}
+
+.login-btn{
+    background:var(--card);
+    color:var(--text);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:10px 15px;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.container{
+    padding:20px;
+}
+
+h1{
+    margin-bottom:20px;
+    font-size:28px;
+    font-weight:700;
+}
+
+h2,h3{
+    color:var(--text);
+}
+
+input,
+textarea{
+    width:100%;
+    padding:15px;
+    background:var(--card);
+    color:var(--text);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:18px;
+    margin-bottom:20px;
+    font-size:16px;
+    outline:none;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:var(--secondary);
+}
+
+textarea{
+    height:180px;
+    resize:none;
+}
+
+.order-btn{
+    width:100%;
+    background:linear-gradient(
+        135deg,
+        var(--green),
+        var(--green-dark)
+    );
+    color:white;
+    border:none;
+    padding:16px;
+    border-radius:18px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(0,210,106,0.25);
+}
+
+.order-card{
+    background:var(--card);
+    margin-top:15px;
+    padding:18px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+.status{
+    color:var(--green);
+    font-weight:600;
+}
+
+.chat-btn{
+    background:linear-gradient(
+        135deg,
+        var(--green),
+        var(--green-dark)
+    );
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.action-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+#notifDot{
+    color:#ff4d4d;
+    font-size:18px;
+    font-weight:bold;
+}
+
+  .user-box{
+    background: var(--card);
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    display: inline-block;
+}
+
+#userInfo{
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        Njan Allathe Pinne Aaru
+    </div>
+
+    <div class="header-buttons">
+<button class="login-btn"
+onclick="location.href='notification.html'">
+Inbox <span id="notifDot"></span>
+</button>
+        <button class="login-btn"
+            onclick="location.href='delivery.html'">
+            Delivery
+        </button>
+      
+
+        <button class="login-btn"
+            onclick="logout()">
+            Logout
+        </button>
+    </div>
+</header>
+
+<div class="container">
+   
+<div class="user-box">
+    <h2 id="userInfo"></h2>
+</div>
+    <h1>What do you need?</h1>
+
+    <input
+    type="text"
+    id="room"
+    placeholder="Enter Room Number">
+
+    <textarea
+    id="items"
+    placeholder="Enter Items"></textarea>
+
+    <button
+    class="order-btn"
+    onclick="placeOrder()">
+        Place Order
+    </button>
+
+    <br><br>
+
+    <h2>Your Orders</h2>
+  <div id="orders"></div>
+
+    
+
+</div>
+
+<script type="module">
+
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  updateDoc,
+  doc,
+  query,
+  where,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import { auth, db } from "./firebase.js";
+  const savedOrders = localStorage.getItem("cachedOrders");
+
+if(savedOrders){
+    document.getElementById("orders").innerHTML = savedOrders;
+}
+  // Show cached user immediately
+  const savedName = localStorage.getItem("userName");
+
+if(savedName){
+    document.getElementById("userInfo").innerText =
+        "User : " + savedName;
+}
+
+
+// ========================
+// GLOBAL CHAT CACHE
+// ========================
+let chatCache = [];
+
+onSnapshot(collection(db, "chats"), (snapshot) => {
+    chatCache = snapshot.docs.map(doc => doc.data());
+});
+
+
+// ========================
+// UNREAD CHECK
+// ========================
+function checkUnread(orderId, currentUser) {
+    return chatCache.some(chat =>
+        chat.orderId === orderId &&
+        chat.sender !== currentUser.displayName &&
+        chat.read === false
+    );
+}
+
+
+// ========================
+// LOAD ORDERS
+// ========================
+async function loadOrders() {
+
+    const q = query(
+        collection(db, "orders"),
+        where("userEmail", "==", auth.currentUser.email)
+    );
+
+    onSnapshot(q, (snapshot) => {
+
+        const ordersDiv = document.getElementById("orders");
+        ordersDiv.innerHTML = "";
+
+        const currentUser = auth.currentUser;
+        const today = new Date().toDateString();
+
+        snapshot.forEach((docSnap) => {
+
+            const order = docSnap.data();
+
+            if (order.orderDate !== today) return;
+
+            const orderId = docSnap.id;
+            const hasUnread = checkUnread(orderId, currentUser);
+
+            const card = document.createElement("div");
+            card.className = "order-card";
+
+            card.innerHTML = `
+                <h3>Room ${order.room}</h3>
+                <p>${order.items}</p>
+                <p class="status">${order.status}</p>
+                <p>Delivery Partner: ${order.deliveryBoy || "Not Assigned"}</p>
+                <p>Time: ${order.createdAt}</p>
+
+                ${order.deliveryBoy ? `
+                    <button class="chat-btn"
+                    onclick="window.location.href='chat.html?id=${orderId}'">
+                    💬 Contact Delivery Partner ${hasUnread ? '🔴' : ''}
+                    </button>
+                ` : `
+                    <button class="chat-btn" disabled style="opacity:0.5;">
+                    ⏳ Waiting for order
+                    </button>
+                `}
+            `;
+ordersDiv.appendChild(card);
+
+    });
+
+    localStorage.setItem(
+        "cachedOrders",
+        ordersDiv.innerHTML
+    );
+
+});
+}
+            
+
+
+
+// ========================
+// PLACE ORDER
+// ========================
+window.placeOrder = async function () {
+
+    if (!auth.currentUser) {
+        alert("Please login first");
+        location.href = "login.html";
+        return;
+    }
+
+    const room = document.getElementById("room").value;
+    const items = document.getElementById("items").value;
+
+    if (room === "" || items === "") {
+        alert("Fill all fields");
+        return;
+    }
+
+    await addDoc(collection(db, "orders"), {
+        room,
+        items,
+        status: "Pending",
+        userEmail: auth.currentUser.email,
+        userName: auth.currentUser.displayName,
+        createdAt: new Date().toLocaleString(),
+        orderDate: new Date().toDateString()
+    });
+
+    alert("Order Placed!");
+
+    document.getElementById("room").value = "";
+    document.getElementById("items").value = "";
+};
+
+
+// ========================
+// AUTH
+// ========================
+onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+
+    localStorage.setItem(
+        "userName",
+        user.displayName
+    );
+
+    document.getElementById("userInfo").innerText =
+        "User : " + user.displayName;
+
+    loadOrders();
+    } else {
+        document.getElementById("userInfo").innerText =
+            "Not Logged In";
+
+        location.href = "login.html";
+    }
+
+});
+
+
+// ========================
+// LOGOUT
+// ========================
+window.logout = function () {
+
+    localStorage.removeItem("userName");
+  localStorage.removeItem("cachedOrders");
+
+    signOut(auth).then(() => {
+        location.href = "login.html";
+    });
+};
+
+
+// ========================
+// CANCEL ORDER
+// ========================
+window.cancelOrder = async function (orderId) {
+    try {
+        const orderRef = doc(db, "orders", orderId);
+
+        const orderSnap = await getDoc(orderRef);
+
+        const order = orderSnap.data();
+
+        await updateDoc(orderRef, {
+            status: "Cancelled"
+        });
+
+        alert("Order Cancelled");
+
+    } catch (err) {
+        alert("Error: " + err.message);
+    }
+};
+
+</script>
+
+</body>
+</html>
