@@ -5,7 +5,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>HostelKart Login</title>
-
 <style>
 
 :root{
@@ -26,88 +25,107 @@
 
 body{
     background:var(--bg);
+    color:var(--text);
+
+    /* 🔥 SAFE MOBILE CENTERING */
+    min-height:100vh;
     display:flex;
     justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    padding:20px;
+
+    /* IMPORTANT: removes vertical centering issues */
+    align-items:flex-start;
+
+    padding:24px 16px;
 }
 
-.login-card{
-    background:var(--card);
+/* 🔥 MAIN CARD */
+.container{
     width:100%;
-    max-width:380px;
-    border-radius:24px;
-    overflow:hidden;
+    max-width:420px;
+    background:var(--card);
+
+    margin-top:40px;
+
+    padding:26px 20px;
+    border-radius:20px;
     border:1px solid rgba(255,255,255,0.05);
+
     box-shadow:0 15px 40px rgba(0,0,0,0.35);
 }
 
-.top{
-    padding:35px 25px;
+/* TITLE */
+h1{
     text-align:center;
-}
-
-.top h1{
     color:var(--green);
-    font-size:34px;
-    font-weight:700;
+    font-size:28px;
+    margin-bottom:6px;
 }
 
-.top p{
+/* SUBTITLE */
+.subtitle{
+    text-align:center;
     color:var(--secondary);
-    margin-top:8px;
+    font-size:13px;
+    margin-bottom:24px;
 }
 
-.form{
-    padding:25px;
-}
-
+/* INPUTS */
 input{
     width:100%;
-    padding:16px;
-    margin-bottom:15px;
+    padding:14px;
+
+    margin-bottom:12px;
+
     background:#123246;
     color:white;
+
     border:1px solid rgba(255,255,255,0.08);
-    border-radius:16px;
+    border-radius:12px;
+
     font-size:16px;
+
     outline:none;
 }
 
-input::placeholder{
-    color:var(--secondary);
+/* focus */
+input:focus{
+    border-color:var(--green);
+    box-shadow:0 0 10px rgba(0,210,106,0.25);
 }
 
-.login-btn{
+/* BUTTON */
+button{
     width:100%;
-    padding:16px;
-    background:linear-gradient(
-        135deg,
-        var(--green),
-        var(--green-dark)
-    );
+    padding:14px;
+
+    margin-top:6px;
+
+    background:linear-gradient(135deg,var(--green),var(--green-dark));
     color:white;
+
     border:none;
-    border-radius:16px;
-    font-size:18px;
+    border-radius:12px;
+
+    font-size:16px;
     font-weight:600;
-    cursor:pointer;
 }
 
-.signup{
+/* TEXT */
+p{
     text-align:center;
-    margin-top:18px;
+    margin-top:16px;
     color:var(--secondary);
+    font-size:14px;
 }
 
-.signup a{
+a{
     color:var(--green);
-    text-decoration:none;
     font-weight:600;
+    text-decoration:none;
 }
 
 </style>
+
 </head>
 
 <body>
