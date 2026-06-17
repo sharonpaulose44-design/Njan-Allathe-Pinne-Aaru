@@ -122,41 +122,29 @@ a{
 
 <body>
 
-<div class="login-card">
+<div class="container">
+    <div class="card">
 
-    <div class="top">
-        <h1> Njan Allathe Pinne Aaru</h1>
-        <p>For the Hostlers , By the Hostlers </p>
-    </div>
+        <div class="logo">NAPA</div>
 
-    <class="form">
-
-    <input
-type="email"
-id="email"
-placeholder="Email">
-
-<input
-type="password"
-id="password"
-placeholder="Password">
-
-    <button class="login-btn" onclick="login()">
-    Login
-</button>
-
-        <div class="footer">
-    <p class="text">
-        Already have an account?
-    </p>
-
-    <a class="link" href="login.html">
-        Login here
-    </a>
+        <div class="subtitle">
+            Njan Allathe Pinne Aaru ?
         </div>
 
-</div>
+        <!-- Email Input -->
 
+        <!-- Password Input -->
+
+        <!-- Login Button -->
+
+        <div class="bottom-text">
+            New User?
+        </div>
+
+        <a href="signup.html">Create Account</a>
+
+    </div>
+</div>
 <script type="module">
 
 import { auth } from "./firebase.js";
