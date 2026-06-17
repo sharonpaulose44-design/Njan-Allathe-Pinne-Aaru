@@ -56,8 +56,9 @@ header{
     display:flex;
     flex-direction:column;
     gap:10px;
-}
 
+    padding-bottom:90px; /* 🔥 IMPORTANT SPACE FOR INPUT */
+}
 .message{
     background:var(--card);
     color:var(--text);
@@ -101,7 +102,16 @@ small{
     display:flex;
     align-items:center;
     gap:10px;
-    padding:12px;
+    padding:10px;
+
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+
+    background:#0b1f2b;
+
+    border-top:1px solid rgba(255,255,255,0.08);
 }
 
 #msg{
