@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Inbox</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#071923;
+    --card:#0d2533;
+    --green:#00d26a;
+    --green-dark:#00b85c;
+    --text:#ffffff;
+    --secondary:#9fb3c8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+}
+
+header{
+    background:#0b1f2b;
+    color:var(--green);
+    text-align:center;
+    padding:20px;
+    font-size:24px;
+    font-weight:700;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 4px 15px rgba(0,0,0,0.25);
+}
+
+.container{
+    padding:20px;
+}
+
+.notification-card{
+    background:var(--card);
+    padding:18px;
+    border-radius:20px;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+.notification-card p{
+    color:var(--text);
+    line-height:1.5;
+}
+
+.time{
+    color:var(--secondary);
+    font-size:13px;
+    margin-top:8px;
+}
+
+</style>
+  </head>
+
+</head>
+
+<body>
+
+<header>
+    <h2>INBOX</h2>
+</header>
+
+<div class="container" id="notifications">
+</div>
+<script type="module">
+import { auth, db } from "./firebase.js";
+
+import {
+    collection,
+    query,
+    where,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const notificationsDiv = document.getElementById("notifications");
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) return;
+
+    // ✅ ONLY fetch current user's notifications (important fix)
+    const q = query(
+        collection(db, "notifications"),
+        where("userEmail", "==", user.email)
+    );
+
+    onSnapshot(q, (snapshot) => {
+
+        let html = "";
+
+        // Convert docs into array
+        const notifications = [];
+
+        snapshot.forEach((docSnap) => {
+            notifications.push(docSnap.data());
+        });
+
+        // Sort newest first
+        notifications.sort((a, b) => b.time - a.time);
+
+        // Build HTML once (FAST)
+        notifications.forEach((n) => {
+            html += `
+                <div class="notification-card">
+                    ${n.message}
+                    <div class="time">
+                        ${new Date(n.time).toLocaleString()}
+                    </div>
+                </div>
+            `;
+        });
+
+        notificationsDiv.innerHTML = html || "<p>No notifications yet</p>";
+      
+    });
+});
+</script>
+
+</body>
+</html>

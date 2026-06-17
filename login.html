@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>HostelKart Login</title>
+
+<style>
+
+:root{
+    --bg:#071923;
+    --card:#0d2533;
+    --green:#00d26a;
+    --green-dark:#00b85c;
+    --text:#ffffff;
+    --secondary:#9fb3c8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.login-card{
+    background:var(--card);
+    width:100%;
+    max-width:380px;
+    border-radius:24px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow:0 15px 40px rgba(0,0,0,0.35);
+}
+
+.top{
+    padding:35px 25px;
+    text-align:center;
+}
+
+.top h1{
+    color:var(--green);
+    font-size:34px;
+    font-weight:700;
+}
+
+.top p{
+    color:var(--secondary);
+    margin-top:8px;
+}
+
+.form{
+    padding:25px;
+}
+
+input{
+    width:100%;
+    padding:16px;
+    margin-bottom:15px;
+    background:#123246;
+    color:white;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px;
+    font-size:16px;
+    outline:none;
+}
+
+input::placeholder{
+    color:var(--secondary);
+}
+
+.login-btn{
+    width:100%;
+    padding:16px;
+    background:linear-gradient(
+        135deg,
+        var(--green),
+        var(--green-dark)
+    );
+    color:white;
+    border:none;
+    border-radius:16px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.signup{
+    text-align:center;
+    margin-top:18px;
+    color:var(--secondary);
+}
+
+.signup a{
+    color:var(--green);
+    text-decoration:none;
+    font-weight:600;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <div class="top">
+        <h1> Njan Allathe Pinne Aaru</h1>
+        <p>For the Hostlers , By the Hostlers </p>
+    </div>
+
+    <div class="form">
+
+    <input
+type="email"
+id="email"
+placeholder="Email">
+
+<input
+type="password"
+id="password"
+placeholder="Password">
+
+    <button class="login-btn" onclick="login()">
+    Login
+</button>
+
+        <div class="signup">
+            New user?
+            <a href="signup.html">Sign Up</a>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+import { auth } from "./firebase.js";
+
+import {
+signInWithEmailAndPassword
+}
+from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+window.login = function(){
+
+let email =
+document.getElementById("email").value;
+
+let password =
+document.getElementById("password").value;
+
+signInWithEmailAndPassword(
+auth,
+email,
+password
+)
+.then(()=>{
+    localStorage.setItem("isDelivery","true");
+    location.href="hostel.html";
+})
+.catch(error=>{
+    alert(error.message);
+});
+
+}
+
+</script>
+
+</body>
+</html>

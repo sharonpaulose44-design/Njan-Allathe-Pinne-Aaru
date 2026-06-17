@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HostelKart Delivery Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#071923;
+    --card:#0d2533;
+    --green:#00d26a;
+    --green-dark:#00b85c;
+    --text:#ffffff;
+    --secondary:#9fb3c8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+}
+
+header{
+    background:#0b1f2b;
+    color:var(--green);
+    text-align:center;
+    padding:20px;
+    font-size:24px;
+    font-weight:700;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 4px 15px rgba(0,0,0,0.25);
+}
+
+.container{
+    padding:20px;
+}
+
+.order-card{
+    background:var(--card);
+    padding:18px;
+    border-radius:20px;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+.order-card h3{
+    color:var(--green);
+    margin-bottom:10px;
+    font-size:20px;
+}
+
+.order-card p{
+    margin-bottom:8px;
+    color:var(--text);
+    line-height:1.5;
+}
+
+.accept-btn{
+    background:linear-gradient(
+        135deg,
+        var(--green),
+        var(--green-dark)
+    );
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:15px;
+    margin-top:10px;
+    transition:0.2s;
+}
+
+.accept-btn:active{
+    transform:scale(0.98);
+}
+
+.accepted{
+    color:var(--green);
+    font-weight:600;
+    margin-top:10px;
+}
+
+</style>
+</head>
+</head>
+<body>
+
+<header>
+    <h2> Delivery Dashboard</h2>
+</header>
+<div class="container" id="orders"></div>
+
+<script type="module">
+  import { auth } from "./firebase.js";
+  
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDeSE0aXnd0CChr28Td4u3ISALafevXgI8",
+  authDomain: "hostelkart-a35b7.firebaseapp.com",
+  projectId: "hostelkart-a35b7",
+  storageBucket: "hostelkart-a35b7.firebasestorage.app",
+  messagingSenderId: "854610607391",
+  appId: "1:854610607391:web:5952ee101738cd08f7442a",
+  measurementId: "G-98D0SK58CC"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let chatCache = [];
+
+onSnapshot(collection(db, "chats"), (snapshot) => {
+    chatCache = snapshot.docs.map(doc => doc.data());
+});
+
+function checkUnread(orderId, currentUser) {
+    return chatCache.some(chat =>
+        chat.orderId === orderId &&
+        chat.sender !== currentUser.displayName &&
+        chat.read === false
+    );
+}
+if(localStorage.getItem("isDelivery") !== "true"){
+    location.href = "login.html";
+}
+
+const ordersDiv = document.getElementById("orders");
+
+
+function loadOrders() {
+
+    onSnapshot(collection(db,"orders"), (snapshot) => {
+
+        
+
+        ordersDiv.innerHTML = "";
+
+        snapshot.forEach((docSnap) => {
+   const order = docSnap.data();
+          const hasUnread =
+    checkUnread(docSnap.id, auth.currentUser);
+
+          
+const today = new Date().toDateString();
+          
+if(order.orderDate !== today){
+        return;
+}
+ordersDiv.innerHTML += `
+<div class="order-card">
+    <h3>Room ${order.room}</h3>
+    <p>Customer: ${order.userName}</p>
+    <p>${order.items}</p>
+    <p>Status: ${order.status}</p>
+<p>Delivery Partner: ${order.deliveryBoy || "Not Assigned"}</p>
+<p>Time: ${order.createdAt}</p>
+${
+  order.status === "Pending" &&
+  order.userEmail !== auth.currentUser.email
+  ? `<button class="accept-btn"
+onclick="acceptOrder('${docSnap.id}','${order.userEmail}')">
+Accept Order
+</button>`
+  : ""
+}
+
+${
+  order.status === "Accepted"
+  ? `<p class="accepted">✅ Accepted</p>`
+  : ""
+}
+
+${
+  order.status === "Delivered"
+  ? `<p class="accepted">📦 Delivered</p>`
+  : ""
+}
+${
+  order.status === "Accepted" &&
+  order.deliveryEmail === auth.currentUser.email
+  ? `
+     <button class="accept-btn"
+     onclick="deliverOrder('${docSnap.id}','${order.userEmail}')">
+     Mark Delivered
+     </button>
+
+     <button class="accept-btn"
+onclick="location.href='chat.html?id=${docSnap.id}'">
+💬 Chat ${hasUnread ? "🔴" : ""}
+</button>
+     `
+  : ""
+}
+</div>
+`;
+        });
+      
+
+    });
+}
+
+window.acceptOrder = async function(orderId, userEmail){
+
+    await updateDoc(
+        doc(db,"orders",orderId),
+        {
+            status: "Accepted",
+            deliveryBoy: auth.currentUser.displayName,
+            deliveryEmail: auth.currentUser.email
+        }
+    );
+
+    await addDoc(
+        collection(db,"notifications"),
+        {
+            userEmail: userEmail,
+            message: `${auth.currentUser.displayName} accepted your order`,
+            time: Date.now(),
+            read: false
+        }
+    );
+
+}
+  window.deliverOrder = async function(orderId, userEmail){
+
+    await updateDoc(
+        doc(db,"orders",orderId),
+        {
+            status:"Delivered"
+        }
+    );
+
+    await addDoc(
+        collection(db,"notifications"),
+        {
+            userEmail: userEmail,
+            message: "📦 Your order has been delivered",
+            time: Date.now(),
+            read: false
+        }
+    );
+
+    alert("Order Delivered");
+  }
+loadOrders();
+</script>
+
+</body>
+</html>
