@@ -16,14 +16,14 @@
 
 body{
     background:#071923;
-    min-height:100vh;
+    color:white;
 
-    /* SIMPLE + SAFE */
+    /* SAFE MOBILE SCROLL LAYOUT */
+    min-height:100vh;
+    padding:24px 16px;
+
     display:flex;
     justify-content:center;
-    align-items:center;
-
-    padding:20px;
 }
 
 /* CARD */
@@ -32,11 +32,14 @@ body{
     max-width:380px;
 
     background:#0d2533;
-    padding:24px 18px;
-
     border-radius:18px;
 
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    padding:26px 18px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,0.4);
+
+    /* IMPORTANT: prevents overflow issues */
+    margin-top:40px;
 }
 
 /* TITLE */
@@ -52,7 +55,7 @@ h1{
     text-align:center;
     color:#9fb3c8;
     font-size:13px;
-    margin-bottom:20px;
+    margin-bottom:22px;
 }
 
 /* INPUTS */
@@ -81,27 +84,17 @@ button{
     border:none;
     border-radius:12px;
 
-    background:#00d26a;
+    background:linear-gradient(135deg,#00d26a,#00b85c);
     color:white;
 
     font-size:16px;
     font-weight:600;
+
+    margin-top:6px;
 }
 
 /* FOOTER */
-p{
-    text-align:center;
-    margin-top:14px;
-    color:#9fb3c8;
-    font-size:13px;
-}
-
-a{
-    color:#00d26a;
-    text-decoration:none;
-    font-weight:600;
-}
-  .footer{
+.footer{
     margin-top:18px;
     text-align:center;
 }
@@ -113,21 +106,13 @@ a{
 }
 
 .footer .link{
-    display:inline-block;
     color:#00d26a;
     font-weight:600;
     text-decoration:none;
     font-size:14px;
 }
-  .top{
-    margin-top: 8px;
-    margin-bottom: 20px;
-    color: var(--secondary);
-    font-size: 14px;
-  }
 
 </style>
-
 </head>
 
 <body>
