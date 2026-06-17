@@ -6,6 +6,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>HostelKart Login</title>
 <style>
+:root{
+    --bg:#021b27;
+    --card:#08293a;
+    --input:#0a3a52;
+    --green:#00d26a;
+    --text:#ffffff;
+    --secondary:#b0c0cf;
+}
 
 *{
     margin:0;
@@ -15,99 +23,100 @@
 }
 
 body{
-    background:#071923;
+    background:var(--bg);
     min-height:100vh;
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     padding:20px;
 }
 
-/* CARD */
 .container{
     width:100%;
-    max-width:380px;
-
-    background:#0d2533;
-
-    padding:25px;
-    border-radius:20px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    max-width:420px;
 }
 
-/* TITLE */
-h1{
+.card{
+    background:var(--card);
+    border-radius:35px;
+    padding:35px 25px;
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+}
+
+.logo{
     text-align:center;
-    color:#00d26a;
-    font-size:26px;
-    margin-bottom:6px;
+    color:var(--green);
+    font-size:54px;
+    font-weight:700;
+    margin-bottom:12px;
 }
 
-/* SUBTITLE */
 .subtitle{
     text-align:center;
-    color:#9fb3c8;
-    font-size:13px;
-    margin-bottom:22px;
+    color:var(--secondary);
+    font-size:18px;
+    margin-bottom:30px;
 }
 
-/* INPUTS */
 input{
     width:100%;
-    padding:14px;
-
-    margin-bottom:12px;
-
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,0.08);
-
-    background:#123246;
-    color:white;
-
-    font-size:16px;
-
+    height:65px;
+    background:var(--input);
+    border:none;
     outline:none;
+    border-radius:22px;
+    padding:0 22px;
+    margin-bottom:18px;
+    color:white;
+    font-size:18px;
 }
 
-/* BUTTON */
+input::placeholder{
+    color:#9fb3c8;
+}
+
 button{
     width:100%;
-    padding:14px;
-
+    height:68px;
     border:none;
-    border-radius:12px;
-
-    background:linear-gradient(135deg,#00d26a,#00b85c);
+    border-radius:22px;
+    background:var(--green);
     color:white;
-
-    font-size:16px;
-    font-weight:600;
-
-    margin-top:6px;
+    font-size:22px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:8px;
 }
 
-/* FOOTER */
-.footer{
-    margin-top:18px;
+button:active{
+    transform:scale(0.98);
+}
+
+.bottom-text{
     text-align:center;
+    color:var(--secondary);
+    margin-top:28px;
+    font-size:16px;
 }
 
-.footer .text{
-    color:#9fb3c8;
-    font-size:13px;
-    margin-bottom:6px;
-}
-
-.footer .link{
-    color:#00d26a;
-    font-weight:600;
+a{
+    display:block;
+    text-align:center;
+    color:var(--green);
+    font-weight:700;
     text-decoration:none;
-    font-size:14px;
+    margin-top:8px;
+    font-size:18px;
 }
 
+@media(max-height:700px){
+    body{
+        align-items:flex-start;
+        padding-top:40px;
+        padding-bottom:40px;
+    }
+}
 </style>
 </head>
 
