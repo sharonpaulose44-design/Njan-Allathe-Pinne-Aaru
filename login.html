@@ -7,15 +7,6 @@
 <title>HostelKart Login</title>
 <style>
 
-:root{
-    --bg:#071923;
-    --card:#0d2533;
-    --green:#00d26a;
-    --green-dark:#00b85c;
-    --text:#ffffff;
-    --secondary:#9fb3c8;
-}
-
 *{
     margin:0;
     padding:0;
@@ -24,49 +15,44 @@
 }
 
 body{
-    background:var(--bg);
-    color:var(--text);
-
-    /* 🔥 SAFE MOBILE CENTERING */
+    background:#071923;
     min-height:100vh;
+
+    /* SIMPLE + SAFE */
     display:flex;
     justify-content:center;
+    align-items:center;
 
-    /* IMPORTANT: removes vertical centering issues */
-    align-items:flex-start;
-
-    padding:24px 16px;
+    padding:20px;
 }
 
-/* 🔥 MAIN CARD */
+/* CARD */
 .container{
     width:100%;
-    max-width:420px;
-    background:var(--card);
+    max-width:380px;
 
-    margin-top:40px;
+    background:#0d2533;
+    padding:24px 18px;
 
-    padding:26px 20px;
-    border-radius:20px;
-    border:1px solid rgba(255,255,255,0.05);
+    border-radius:18px;
 
-    box-shadow:0 15px 40px rgba(0,0,0,0.35);
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 /* TITLE */
 h1{
     text-align:center;
-    color:var(--green);
-    font-size:28px;
+    color:#00d26a;
+    font-size:26px;
     margin-bottom:6px;
 }
 
 /* SUBTITLE */
 .subtitle{
     text-align:center;
-    color:var(--secondary);
+    color:#9fb3c8;
     font-size:13px;
-    margin-bottom:24px;
+    margin-bottom:20px;
 }
 
 /* INPUTS */
@@ -76,21 +62,15 @@ input{
 
     margin-bottom:12px;
 
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.08);
+
     background:#123246;
     color:white;
-
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:12px;
 
     font-size:16px;
 
     outline:none;
-}
-
-/* focus */
-input:focus{
-    border-color:var(--green);
-    box-shadow:0 0 10px rgba(0,210,106,0.25);
 }
 
 /* BUTTON */
@@ -98,31 +78,53 @@ button{
     width:100%;
     padding:14px;
 
-    margin-top:6px;
-
-    background:linear-gradient(135deg,var(--green),var(--green-dark));
-    color:white;
-
     border:none;
     border-radius:12px;
+
+    background:#00d26a;
+    color:white;
 
     font-size:16px;
     font-weight:600;
 }
 
-/* TEXT */
+/* FOOTER */
 p{
     text-align:center;
-    margin-top:16px;
-    color:var(--secondary);
-    font-size:14px;
+    margin-top:14px;
+    color:#9fb3c8;
+    font-size:13px;
 }
 
 a{
-    color:var(--green);
+    color:#00d26a;
+    text-decoration:none;
+    font-weight:600;
+}
+  .footer{
+    margin-top:18px;
+    text-align:center;
+}
+
+.footer .text{
+    color:#9fb3c8;
+    font-size:13px;
+    margin-bottom:6px;
+}
+
+.footer .link{
+    display:inline-block;
+    color:#00d26a;
     font-weight:600;
     text-decoration:none;
+    font-size:14px;
 }
+  .top{
+    margin-top: 8px;
+    margin-bottom: 20px;
+    color: var(--secondary);
+    font-size: 14px;
+  }
 
 </style>
 
@@ -137,7 +139,7 @@ a{
         <p>For the Hostlers , By the Hostlers </p>
     </div>
 
-    <div class="form">
+    <class="form">
 
     <input
 type="email"
@@ -153,12 +155,15 @@ placeholder="Password">
     Login
 </button>
 
-        <div class="signup">
-            New user?
-            <a href="signup.html">Sign Up</a>
-        </div>
+        <div class="footer">
+    <p class="text">
+        Already have an account?
+    </p>
 
-    </div>
+    <a class="link" href="login.html">
+        Login here
+    </a>
+        </div>
 
 </div>
 
