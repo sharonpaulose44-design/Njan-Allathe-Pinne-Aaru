@@ -141,9 +141,14 @@ function checkUnread(orderId, currentUser) {
         chat.sender !== currentUser.displayName &&
         chat.read === false
     );
-}
-if(localStorage.getItem("isDelivery") !== "true"){
-    location.href = "login.html";
+}const isDelivery = localStorage.getItem("isDelivery");
+
+if (isDelivery !== "true") {
+    setTimeout(() => {
+        if (localStorage.getItem("isDelivery") !== "true") {
+            location.href = "login.html";
+        }
+    }, 500);
 }
 
 const ordersDiv = document.getElementById("orders");
