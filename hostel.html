@@ -10,6 +10,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+#loader{
+  position:fixed;
+  inset:0;
+  background:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
 
 :root{
     --bg:#071923;
@@ -206,6 +215,9 @@ textarea{
 <body>
 
 <header>
+<div id="loader">
+  <h2>Loading...</h2>
+</div>
     <div class="logo">
         Njan Allathe Pinne Aaru
     </div>
@@ -483,6 +495,9 @@ window.cancelOrder = async function(orderId){
 
     }
 };
+window.addEventListener("load", () => {
+  document.getElementById("loader").style.display = "none";
+});
 
 </script>
 
