@@ -177,6 +177,15 @@ textarea{
     font-weight: 600;
     font-size: 16px;
 }
+.action-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.action-buttons .chat-btn{
+    flex:1;
+}
 </style>
 </head>
 
@@ -329,16 +338,23 @@ async function loadOrders() {
                 <p>Delivery Partner: ${order.deliveryBoy || "Not Assigned"}</p>
                 <p>Time: ${order.createdAt}</p>
 
-                ${order.deliveryBoy ? `
-                    <button class="chat-btn"
-                    onclick="window.location.href='chat.html?id=${orderId}'">
-                    💬 Contact Delivery Partner ${hasUnread ? '🔴' : ''}
-                    </button>
-                ` : `
-                    <button class="chat-btn" disabled style="opacity:0.5;">
-                    ⏳ Waiting for order
-                    </button>
-                `}
+                ${order.status === "Pending" ? `
+    <button class="chat-btn"
+    onclick="cancelOrder('${orderId}')">
+    ❌ Cancel Order
+    </button>
+` : ""}
+
+${order.deliveryBoy ? `
+    <button class="chat-btn"
+    onclick="window.location.href='chat.html?id=${orderId}'">
+    💬 Contact Delivery Partner ${hasUnread ? '🔴' : ''}
+    </button>
+` : `
+    <button class="chat-btn" disabled style="opacity:0.5;">
+    ⏳ Waiting for order
+    </button>
+`}
             `;
 ordersDiv.appendChild(card);
 
@@ -432,22 +448,28 @@ window.logout = function () {
 // ========================
 // CANCEL ORDER
 // ========================
-window.cancelOrder = async function (orderId) {
-    try {
-        const orderRef = doc(db, "orders", orderId);
+window.cancelOrder = async function(orderId){
 
-        const orderSnap = await getDoc(orderRef);
+    const confirmCancel =
+        confirm("Cancel this order?");
 
-        const order = orderSnap.data();
+    if(!confirmCancel) return;
 
-        await updateDoc(orderRef, {
-            status: "Cancelled"
-        });
+    try{
+
+        await updateDoc(
+            doc(db,"orders",orderId),
+            {
+                status:"Cancelled"
+            }
+        );
 
         alert("Order Cancelled");
 
-    } catch (err) {
-        alert("Error: " + err.message);
+    }catch(err){
+
+        alert(err.message);
+
     }
 };
 
