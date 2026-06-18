@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NAPA Login</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<title>HostelKart Login</title>
+
 <style>
+
 :root{
-    --bg:#021b27;
-    --card:#08293a;
-    --input:#0a3a52;
+    --bg:#071923;
+    --card:#0d2533;
+    --input:#123246;
     --green:#00d26a;
+    --green-dark:#00b85c;
     --text:#ffffff;
-    --secondary:#b0c0cf;
+    --secondary:#9fb3c8;
 }
 
 *{
@@ -23,8 +30,8 @@
 }
 
 body{
-    background:var(--bg);
     min-height:100vh;
+    background:var(--bg);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -38,154 +45,153 @@ body{
 
 .card{
     background:var(--card);
-    border-radius:35px;
     padding:35px 25px;
+    border-radius:28px;
     border:1px solid rgba(255,255,255,0.05);
-    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    box-shadow:0 15px 40px rgba(0,0,0,0.35);
 }
 
 .logo{
     text-align:center;
     color:var(--green);
-    font-size:54px;
+    font-size:42px;
     font-weight:700;
-    margin-bottom:12px;
+    margin-bottom:5px;
 }
 
 .subtitle{
     text-align:center;
     color:var(--secondary);
-    font-size:18px;
     margin-bottom:30px;
+    font-size:15px;
 }
 
 input{
     width:100%;
-    height:65px;
+    padding:16px;
+    margin-bottom:15px;
     background:var(--input);
-    border:none;
-    outline:none;
-    border-radius:22px;
-    padding:0 22px;
-    margin-bottom:18px;
     color:white;
-    font-size:18px;
+    border:none;
+    border-radius:16px;
+    outline:none;
+    font-size:16px;
 }
 
 input::placeholder{
-    color:#9fb3c8;
+    color:var(--secondary);
 }
 
 button{
     width:100%;
-    height:68px;
-    border:none;
-    border-radius:22px;
-    background:var(--green);
+    padding:16px;
+    background:linear-gradient(
+        135deg,
+        var(--green),
+        var(--green-dark)
+    );
     color:white;
-    font-size:22px;
-    font-weight:700;
+    border:none;
+    border-radius:16px;
+    font-size:18px;
+    font-weight:600;
     cursor:pointer;
-    margin-top:8px;
 }
 
 button:active{
     transform:scale(0.98);
 }
 
-.bottom-text{
+.footer{
     text-align:center;
+    margin-top:20px;
+}
+
+.footer p{
     color:var(--secondary);
-    margin-top:28px;
-    font-size:16px;
+    margin-bottom:5px;
 }
 
-a{
-    display:block;
-    text-align:center;
+.footer a{
     color:var(--green);
-    font-weight:700;
     text-decoration:none;
-    margin-top:8px;
-    font-size:18px;
+    font-weight:600;
 }
 
-@media(max-height:700px){
-    body{
-        align-items:flex-start;
-        padding-top:40px;
-        padding-bottom:40px;
-    }
-}
 </style>
 </head>
 
 <body>
 
-<div class="login-card">
+<div class="container">
 
-    <div class="top">
-        <h1> Njan Allathe Pinne Aaru</h1>
-        <p>For the Hostlers , By the Hostlers </p>
-    </div>
+    <div class="card">
 
-    <class="form">
-
-    <input
-type="email"
-id="email"
-placeholder="Email">
-
-<input
-type="password"
-id="password"
-placeholder="Password">
-
-    <button class="login-btn" onclick="login()">
-    Login
-</button>
-
-        <div class="footer">
-    <p class="text">
-        Already have an account?
-    </p>
-
-    <a class="link" href="login.html">
-        Login here
-    </a>
+        <div class="logo">
+            NAPA
         </div>
 
+        <div class="subtitle">
+            Njan Allathe Pinne Aaru ?
+        </div>
+
+        <input
+        type="email"
+        id="email"
+        placeholder="Email Address">
+
+        <input
+        type="password"
+        id="password"
+        placeholder="Password">
+
+        <button onclick="login()">
+            Login
+        </button>
+
+        <div class="footer">
+            <p>New User?</p>
+            <a href="signup.html">
+                Create Account
+            </a>
+        </div>
+
+    </div>
+
 </div>
+
 <script type="module">
 
 import { auth } from "./firebase.js";
 
 import {
-signInWithEmailAndPassword
+    signInWithEmailAndPassword
 }
-from
-"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 window.login = function(){
 
-let email =
-document.getElementById("email").value;
+    const email =
+    document.getElementById("email").value;
 
-let password =
-document.getElementById("password").value;
+    const password =
+    document.getElementById("password").value;
 
-signInWithEmailAndPassword(
-auth,
-email,
-password
-)
-.then(()=>{
-    localStorage.setItem("isDelivery","true");
-    location.href="hostel.html";
-})
-.catch(error=>{
-    alert(error.message);
-});
+    signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+    )
+    .then(() => {
+
+        location.href = "hostel.html";
+
+    })
+    .catch((error) => {
+
+        alert(error.message);
+
+    });
 
 }
 
