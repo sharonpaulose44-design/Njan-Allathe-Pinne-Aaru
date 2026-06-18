@@ -186,6 +186,20 @@ textarea{
 .action-buttons .chat-btn{
     flex:1;
 }
+.cancel-btn{
+    background:linear-gradient(
+        135deg,
+        #ff4d4d,
+        #d90429
+    );
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(255,77,77,0.25);
+}
 </style>
 </head>
 
@@ -339,10 +353,10 @@ async function loadOrders() {
                 <p>Time: ${order.createdAt}</p>
 
                 ${order.status === "Pending" ? `
-    <button class="chat-btn"
-    onclick="cancelOrder('${orderId}')">
-    ❌ Cancel Order
-    </button>
+    <button class="cancel-btn"
+onclick="cancelOrder('${orderId}')">
+Cancel Order
+</button>
 ` : ""}
 
 ${order.deliveryBoy ? `
@@ -400,7 +414,6 @@ window.placeOrder = async function () {
         orderDate: new Date().toDateString()
     });
 
-    alert("Order Placed!");
 
     document.getElementById("room").value = "";
     document.getElementById("items").value = "";
@@ -463,8 +476,6 @@ window.cancelOrder = async function(orderId){
                 status:"Cancelled"
             }
         );
-
-        alert("Order Cancelled");
 
     }catch(err){
 
