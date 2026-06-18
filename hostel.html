@@ -394,7 +394,12 @@ window.placeOrder = async function () {
 // ========================
 onAuthStateChanged(auth, (user) => {
 
-    if (user) {
+    if (!user) {
+        location.href = "login.html";
+        return;
+    }
+
+    document.body.style.visibility = "visible";
 
     localStorage.setItem(
         "userName",
@@ -405,12 +410,6 @@ onAuthStateChanged(auth, (user) => {
         "User : " + user.displayName;
 
     loadOrders();
-    } else {
-        document.getElementById("userInfo").innerText =
-            "Not Logged In";
-
-        location.href = "login.html";
-    }
 
 });
 
